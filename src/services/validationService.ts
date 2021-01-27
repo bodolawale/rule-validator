@@ -15,6 +15,12 @@ export default class ValidationService {
             condition_value: "condition_value is required.",
         };
         UtilService.validateInput(rule, isRequired,);
+        if (typeof rule.field !== "string") {
+            throw new ErrorObject(400, "field rule should be a string",);
+        }
+        if (typeof rule.condition !== "string") {
+            throw new ErrorObject(400, "field condition should be a string",);
+        }
 
         let field_value;
         const fieldArray = rule.field.split(".",);
