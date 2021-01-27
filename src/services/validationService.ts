@@ -3,9 +3,7 @@ import UtilService from "./utilService";
 
 export default class ValidationService {
 
-    static validate(rule: Record<string, any>, data: Record<string, any>,): {
-        field: any, field_value: any
-    } {
+    static validate(rule: Record<string, any>, data: Record<string, any>,): any {
 
         if (!ValidationService.isObject(rule,)) throw new ErrorObject(400, "rule should be an object.",);
 
@@ -16,7 +14,7 @@ export default class ValidationService {
         };
         UtilService.validateInput(rule, isRequired,);
         if (typeof rule.field !== "string") {
-            throw new ErrorObject(400, "field rule should be a string",);
+            throw new ErrorObject(400, "field field should be a string",);
         }
         if (typeof rule.condition !== "string") {
             throw new ErrorObject(400, "field condition should be a string",);
@@ -35,11 +33,13 @@ export default class ValidationService {
             if (!data[rule.field]) throw new ErrorObject(400, `field ${rule.field} is missing from data.`,);
             field_value = data[rule.field];
         }
+
         if (typeof field_value !== typeof rule.condition_value) {
-            throw new ErrorObject(400, `${rule.field} should be a|an ${typeof rule.condition_value}`,);
+            throw new ErrorObject(400, `${rule.field} should be a|an ${typeof rule.condition_value}.`,);
         }
+
         if (ValidationService.validationCheck(field_value, rule.condition, rule.condition_value,)) {
-            return { field: rule.field, field_value, };
+            return field_value;
         }
         throw new ErrorObject(400, `field ${rule.field} failed validation.`, {
             validation: {

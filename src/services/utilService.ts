@@ -3,7 +3,7 @@ import { ErrorObject, } from "./errorService";
 export default class UtilService {
     static validateInput(input: { [key: string]: any }, isRequired: { [key: string]: string },): void {
         Object.keys(isRequired,).forEach((entry,) => {
-            if (input[entry] === undefined || input[entry] === null) {
+            if (input[entry] === undefined || input[entry] === null || input[entry] === "") {
                 throw new ErrorObject(400, isRequired[entry],);
             }
         },);

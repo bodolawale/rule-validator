@@ -25,14 +25,14 @@ export default class ValidationController {
             data: "data is required.",
         };
         UtilService.validateInput(body, isRequired,);
-        const { field, field_value, } = ValidationService.validate(body.rule, body.data,);
+        const field_value = ValidationService.validate(body.rule, body.data,);
         return res.status(200,).send({
-            message: `field ${field} was successfully validated.`,
+            message: `field ${body.rule.field} was successfully validated.`,
             status: "success",
             data: {
                 validation: {
                     error: "false",
-                    field,
+                    field: body.rule.field,
                     field_value,
                     condition: body.rule.condition,
                     condition_value: body.rule.condition_value,
