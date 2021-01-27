@@ -7,7 +7,7 @@ export default class ValidationService {
         field: any, field_value: any
     } {
 
-        if (typeof rule !== "object") throw new ErrorObject(400, "rule should be a|an object.",);
+        if (!ValidationService.isObject(rule,)) throw new ErrorObject(400, "rule should be an object.",);
 
         const isRequired = {
             field: "field is required.",
@@ -29,6 +29,9 @@ export default class ValidationService {
             if (!data[rule.field]) throw new ErrorObject(400, `field ${rule.field} is missing from data.`,);
             field_value = data[rule.field];
         }
+        if (typeof field_value !== typeof rule.condition_value) {
+            throw new ErrorObject(400, `${rule.field} should be a|an ${typeof rule.condition_value}`,);
+        }
         if (ValidationService.validationCheck(field_value, rule.condition, rule.condition_value,)) {
             return { field: rule.field, field_value, };
         }
@@ -42,6 +45,11 @@ export default class ValidationService {
             },
         },);
 
+    }
+
+    private static isObject(obj,) {
+        const objectConstructor = ({}).constructor;
+        return obj.constructor === objectConstructor;
     }
 
     private static validationCheck(field: any, condition: string, condition_value: any,): any {
