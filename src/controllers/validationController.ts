@@ -31,7 +31,7 @@ export default class ValidationController {
             status: "success",
             data: {
                 validation: {
-                    error: "false",
+                    error: false,
                     field: body.rule.field,
                     field_value,
                     condition: body.rule.condition,
