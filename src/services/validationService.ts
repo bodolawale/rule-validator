@@ -6,6 +6,9 @@ export default class ValidationService {
     static validate(rule: Record<string, any>, data: Record<string, any>,): any {
 
         if (!ValidationService.isObject(rule,)) throw new ErrorObject(400, "rule should be an object.",);
+        if (!ValidationService.isObject(data,) && (typeof data !== "string") && (!Array.isArray(data,))) {
+            throw new ErrorObject(400, "data should be a|an object, array or string.",);
+        }
 
         const isRequired = {
             field: "field is required.",
@@ -34,8 +37,9 @@ export default class ValidationService {
             field_value = data[rule.field];
         }
 
-        if (typeof field_value !== typeof rule.condition_value) {
-            throw new ErrorObject(400, `${rule.field} should be a|an ${typeof rule.condition_value}.`,);
+        if ((typeof field_value === "number" || typeof rule.condition_value === "number")
+            && (typeof field_value === "string" || typeof rule.condition_value === "string")) {
+            throw new ErrorObject(400, "Invalid number and string comparison.",);
         }
 
         if (ValidationService.validationCheck(field_value, rule.condition, rule.condition_value,)) {
@@ -43,7 +47,7 @@ export default class ValidationService {
         }
         throw new ErrorObject(400, `field ${rule.field} failed validation.`, {
             validation: {
-                error: "true",
+                error: true,
                 field: rule.field,
                 field_value,
                 condition: rule.condition,
@@ -69,6 +73,7 @@ export default class ValidationService {
         case "gte":
             return field >= condition_value;
         case "contains":
+            if (typeof field !== "object" && typeof field !== "string") return false;
             return field.includes(condition_value,);
         default:
             throw new ErrorObject(400, "Invalid condition.",);
