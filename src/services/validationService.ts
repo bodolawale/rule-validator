@@ -32,9 +32,11 @@ export default class ValidationService {
 
             field_value = data[fieldArray[0]][fieldArray[1]];
 
-        } else {
+        } else if (fieldArray.length === 1) {
             if (!data[rule.field]) throw new ErrorObject(400, `field ${rule.field} is missing from data.`,);
             field_value = data[rule.field];
+        } else {
+            throw new ErrorObject(400, "field nesting should not be more than two levels.",);
         }
 
         if ((typeof field_value === "number" || typeof rule.condition_value === "number")
