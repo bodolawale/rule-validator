@@ -17,10 +17,10 @@ export default class ValidationService {
         };
         UtilService.validateInput(rule, isRequired,);
         if (typeof rule.field !== "string") {
-            throw new ErrorObject(400, "field field should be a string",);
+            throw new ErrorObject(400, "field field should be a string.",);
         }
         if (typeof rule.condition !== "string") {
-            throw new ErrorObject(400, "field condition should be a string",);
+            throw new ErrorObject(400, "field condition should be a string.",);
         }
 
         let field_value;
